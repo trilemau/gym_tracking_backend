@@ -1,6 +1,6 @@
 package com.trilemau.gymtracking.api.rest;
 
-import com.trilemau.gymtracking.model.Exercise;
+import com.trilemau.gymtracking.domain.entity.Exercise;
 import com.trilemau.gymtracking.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

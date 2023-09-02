@@ -1,0 +1,68 @@
+@startuml class diagram
+
+' left to right direction
+
+' -----------------------------------------
+
+enum MuscleGroup {
+    CHEST
+    BACK
+    SHOULDERS
+    BICEPS
+    TRICEPS
+    NECK
+    TRAPS
+    QUADS
+    GLUTES
+    HAMSTRING
+    CALVES
+    FOREARMS
+    ABS
+}
+
+' -----------------------------------------
+
+class User {
+    -id: Long
+    -createdAt: Instant
+    -name: String
+    -email: String
+    -hashedPassword: String
+
+    -workouts: List<Workout>
+}
+
+class Exercise {
+    -id: Long
+    -name: String
+    -muscleGroup: List<MuscleGroup>
+    -image: byte[]
+}
+
+class ExerciseSet {
+    -id: Long
+    -reps: int
+    -weight: double
+
+    -exercise: Exercise
+}
+
+class Workout {
+    -id: Long
+    -timestamp: Instant
+    -notes: String
+
+    -exerciseSets: List<ExerciseSet>
+}
+
+' -----------------------------------------
+
+Exercise <--- MuscleGroup
+
+User <--- Workout
+Workout <--- ExerciseSet
+ExerciseSet <--- Exercise
+
+' -----------------------------------------
+
+@enduml

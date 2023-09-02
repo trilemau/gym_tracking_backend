@@ -1,6 +1,6 @@
 package com.trilemau.gymtracking.service;
 
-import com.trilemau.gymtracking.model.Exercise;
+import com.trilemau.gymtracking.domain.entity.Exercise;
 import com.trilemau.gymtracking.repository.ExerciseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,5 +15,9 @@ public class ExerciseService {
 
     public Collection<Exercise> getAll() {
         return exerciseRepository.findAll();
+    }
+
+    public Exercise save(Exercise exercise) {
+        return exerciseRepository.save(exercise);
     }
 }
