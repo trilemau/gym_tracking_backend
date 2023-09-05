@@ -68,7 +68,7 @@ public class WorkoutServiceTests {
         exerciseSet.setWeight(37.5);
         exerciseSet.setExercise(flatDumbellChestPress);
 
-        workoutService.addWorkoutSet(exerciseSet, workout);
+        workoutService.addExerciseSet(exerciseSet, workout);
         exerciseSet = workout.getExerciseSets().get(0);
 
         var getUser = userService.getById(user1.getId());
@@ -86,14 +86,14 @@ public class WorkoutServiceTests {
     @Test
     void addExerciseToWorkout_exerciseIsNull() {
         assertThrows(IllegalArgumentException.class, () -> {
-            workoutService.addWorkoutSet(null, workout2);
+            workoutService.addExerciseSet(null, workout2);
         });
     }
 
     @Test
     void addExerciseToWorkout_workoutIsNull() {
         assertThrows(IllegalArgumentException.class, () -> {
-            workoutService.addWorkoutSet(exerciseSet2, null);
+            workoutService.addExerciseSet(exerciseSet2, null);
         });
     }
 
@@ -117,7 +117,7 @@ public class WorkoutServiceTests {
         assertTrue(getExerciseSet.isPresent());
 
         assertEquals(workout1.getExerciseSets().size(), 1);
-        workoutService.removeWorkoutSet(exerciseSet1, workout1);
+        workoutService.removeExerciseSet(exerciseSet1, workout1);
         assertEquals(workout1.getExerciseSets().size(), 0);
 
         getExerciseSet = exerciseSetService.getById(exerciseSet1.getId());
@@ -127,21 +127,21 @@ public class WorkoutServiceTests {
     @Test
     void removeExerciseFromWorkout_exerciseNotInWorkout() {
         assertThrows(ExerciseSetNotInWorkoutException.class, () -> {
-            workoutService.removeWorkoutSet(exerciseSet1, workout2);
+            workoutService.removeExerciseSet(exerciseSet1, workout2);
         });
     }
 
     @Test
     void removeExerciseFromWorkout_exerciseIsNull() {
         assertThrows(IllegalArgumentException.class, () -> {
-            workoutService.removeWorkoutSet(null, workout2);
+            workoutService.removeExerciseSet(null, workout2);
         });
     }
 
     @Test
     void removeExerciseFromWorkout_workoutIsNull() {
         assertThrows(IllegalArgumentException.class, () -> {
-            workoutService.removeWorkoutSet(exerciseSet1, null);
+            workoutService.removeExerciseSet(exerciseSet1, null);
         });
     }
 
@@ -187,21 +187,21 @@ public class WorkoutServiceTests {
 
     @Test
     void getWorkoutsByUser_userNoWorkouts() {
-        var workouts = workoutService.getWorkoutsByUser(user2);
+        var workouts = workoutService.getUserWorkouts(user2);
         assertEquals(workouts.size(), 1);
         assertEquals(workouts.get(0), workout1);
     }
 
     @Test
     void getWorkoutsByUser_userWithWorkouts() {
-        var workouts = workoutService.getWorkoutsByUser(user1);
+        var workouts = workoutService.getUserWorkouts(user1);
         assertEquals(workouts.size(), 0);
     }
 
     @Test
     void getWorkoutsByUser_userIsNull() {
         assertThrows(IllegalArgumentException.class, () -> {
-            workoutService.getWorkoutsByUser(null);
+            workoutService.getUserWorkouts(null);
         });
     }
 }

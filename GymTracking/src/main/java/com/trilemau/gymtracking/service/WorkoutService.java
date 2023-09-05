@@ -29,7 +29,7 @@ public class WorkoutService {
         return workoutRepository.findById(id);
     }
 
-    public List<Workout> getWorkoutsByUser(User user) {
+    public List<Workout> getUserWorkouts(User user) {
         if (user == null) {
             throw new IllegalArgumentException("User is null");
         }
@@ -37,7 +37,7 @@ public class WorkoutService {
         return workoutRepository.getAllByUser(user);
     }
 
-    public void removeWorkoutSet(ExerciseSet exerciseSet, Workout workout) {
+    public void removeExerciseSet(ExerciseSet exerciseSet, Workout workout) {
         if (exerciseSet == null) {
             throw new IllegalArgumentException("Exercise set is null");
         }
@@ -55,7 +55,7 @@ public class WorkoutService {
         workoutRepository.flush(); // apparently a known bug ?
     }
 
-    public void addWorkoutSet(ExerciseSet exerciseSet, Workout workout) {
+    public void addExerciseSet(ExerciseSet exerciseSet, Workout workout) {
         if (exerciseSet == null) {
             throw new IllegalArgumentException("Exercise set is null");
         }
