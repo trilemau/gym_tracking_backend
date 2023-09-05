@@ -1,5 +1,7 @@
 package com.trilemau.gymtracking.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -29,11 +31,13 @@ public class Workout {
     @Column(name = "NOTES", nullable = false)
     private String notes;
 
+    @JsonManagedReference
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
     @OneToMany(mappedBy = "workout", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExerciseSet> exerciseSets = new ArrayList<>();
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
     private User user;
@@ -58,7 +62,7 @@ public class Workout {
                 .append("date", date)
                 .append("notes", notes)
                 .append("exerciseSets", exerciseSets)
-                .append("user", user)
+                .append("user", user.getId())
                 .toString();
     }
 }

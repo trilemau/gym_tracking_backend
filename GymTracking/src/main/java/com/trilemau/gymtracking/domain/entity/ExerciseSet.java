@@ -1,5 +1,6 @@
 package com.trilemau.gymtracking.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -24,6 +25,7 @@ public class ExerciseSet {
     @JoinColumn(name = "EXERCISE_ID")
     private Exercise exercise;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "WORKOUT_ID", referencedColumnName = "ID")
     private Workout workout;
@@ -39,7 +41,7 @@ public class ExerciseSet {
         return new ToStringBuilder(this, SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("exercise", exercise)
-                .append("workout", workout)
+                .append("workout", workout.getId())
                 .append("reps", reps)
                 .append("weight", weight)
                 .toString();

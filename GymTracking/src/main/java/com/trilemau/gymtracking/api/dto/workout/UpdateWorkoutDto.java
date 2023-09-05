@@ -2,20 +2,20 @@ package com.trilemau.gymtracking.api.dto.workout;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Value;
 
 import java.time.LocalDate;
 
-@Builder
-@Value
+@Data
 public class UpdateWorkoutDto {
 
     @NotNull
-    Long id;
+    private Long id;
 
     @NotNull
-    LocalDate date;
+    private LocalDate date;
 
     @NotNull
-    String notes;
+    private String notes;
 }

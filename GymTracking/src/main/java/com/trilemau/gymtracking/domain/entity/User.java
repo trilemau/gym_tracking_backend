@@ -1,5 +1,6 @@
 package com.trilemau.gymtracking.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -37,6 +38,7 @@ public class User {
     @Column(name = "CREATED_AT", updatable = false, nullable = false)
     private Instant createdAt;
 
+    @JsonManagedReference
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

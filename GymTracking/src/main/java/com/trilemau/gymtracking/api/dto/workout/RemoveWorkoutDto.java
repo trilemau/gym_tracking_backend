@@ -2,15 +2,15 @@ package com.trilemau.gymtracking.api.dto.workout;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Value;
 
-@Builder
-@Value
+@Data
 public class RemoveWorkoutDto {
 
     @NotNull
-    Long workoutId;
+    private Long workoutId;
 
     @NotNull
-    Long userId;
+    private Long userId;
 }

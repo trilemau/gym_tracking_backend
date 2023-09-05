@@ -2,12 +2,12 @@ package com.trilemau.gymtracking.api.dto.workout;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Value;
 
-@Builder
-@Value
+@Data
 public class AddWorkoutDto {
 
     @NotNull
-    Long userId;
+    private Long userId;
 }
