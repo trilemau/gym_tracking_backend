@@ -1,10 +1,12 @@
 package com.trilemau.gymtracking.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
+
+@EqualsAndHashCode
 @NoArgsConstructor
 @Getter
 @Setter
@@ -30,4 +32,15 @@ public class ExerciseSet {
 
     @Column(name = "WEIGHT", nullable = false)
     private double weight;
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("exercise", exercise)
+                .append("workout", workout)
+                .append("reps", reps)
+                .append("weight", weight)
+                .toString();
+    }
 }

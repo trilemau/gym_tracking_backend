@@ -1,13 +1,15 @@
 package com.trilemau.gymtracking.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
+import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
+
+@EqualsAndHashCode
 @NoArgsConstructor
 @Getter
 @Setter
@@ -21,15 +23,41 @@ public class Workout {
     private Long id;
 
     @Column(name = "DATE", nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @Column(name = "NOTES", nullable = false)
     private String notes;
 
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
     @OneToMany(mappedBy = "workout", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ExerciseSet> exerciseSets;
+    private List<ExerciseSet> exerciseSets = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
     private User user;
+
+    public List<ExerciseSet> getExerciseSets() {
+        return Collections.unmodifiableList(exerciseSets);
+    }
+
+    public void addExerciseSet(ExerciseSet exerciseSet) {
+        exerciseSets.add(exerciseSet);
+        exerciseSet.setWorkout(this);
+    }
+
+    public void removeExerciseSet(ExerciseSet exerciseSet) {
+        exerciseSets.remove(exerciseSet);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("date", date)
+                .append("notes", notes)
+                .append("exerciseSets", exerciseSets)
+                .append("user", user)
+                .toString();
+    }
 }

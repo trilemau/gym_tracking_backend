@@ -1,0 +1,37 @@
+@startuml
+
+left to right direction
+
+' -----------------------------------------
+
+actor User
+
+package Workout {
+    User --> (Add Workout)
+    User --> (Edit Workout)
+    User --> (Remove Workout)
+    User --> (See all Workouts)
+}
+
+package Set {
+    User --> (Add Set)
+    User --> (Edit Set)
+    User --> (Remove Set)
+}
+
+package Exercise {
+    User --> (Add Exercise)
+    User --> (Edit Exercise)
+    User --> (Remove Exercise)
+    User --> (See all Exercise)
+}
+
+package Bodyweight {
+    User --> (See progress of exercises - max weight)
+    User --> (Add bodyweight)
+    User --> (See bodyweight progress)
+}
+
+' -----------------------------------------
+
+@enduml

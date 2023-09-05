@@ -2,12 +2,17 @@ package com.trilemau.gymtracking.domain.entity;
 
 import com.trilemau.gymtracking.domain.enums.MuscleGroup;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
+
+@EqualsAndHashCode
 @NoArgsConstructor
 @Getter
 @Setter
@@ -24,11 +29,21 @@ public class Exercise {
     private String name;
 
     @Column
-    @Enumerated
-    @ElementCollection(targetClass = MuscleGroup.class)
-    private List<MuscleGroup> muscleGroups;
+    @Enumerated(EnumType.STRING)
+    @ElementCollection(targetClass = MuscleGroup.class, fetch = FetchType.EAGER)
+    private Set<MuscleGroup> muscleGroups = new HashSet<>();
 
     @Lob
     @Column(name = "IMAGE")
     private byte[] image;
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("muscleGroups", muscleGroups)
+                .append("imageLength", image == null ? "null" : image.length)
+                .toString();
+    }
 }
