@@ -2,6 +2,8 @@ package com.trilemau.gymtracking.service;
 
 import com.trilemau.gymtracking.domain.entity.User;
 import com.trilemau.gymtracking.domain.entity.Workout;
+import com.trilemau.gymtracking.error.exception.ExerciseSetNotInWorkoutException;
+import com.trilemau.gymtracking.error.exception.WorkoutNotInUserException;
 import com.trilemau.gymtracking.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public User addWorkout(Workout workout, User user) {
+    public void addWorkout(Workout workout, User user) {
         if (workout == null) {
             throw new IllegalArgumentException("Workout is null");
         }
@@ -32,6 +34,24 @@ public class UserService {
         }
 
         user.addWorkout(workout);
-        return userRepository.save(user);
+        user = userRepository.save(user);
+    }
+
+    public void removeWorkout(Workout workout, User user) {
+        if (workout == null) {
+            throw new IllegalArgumentException("Workout is null");
+        }
+
+        if (user == null) {
+            throw new IllegalArgumentException("User is null");
+        }
+
+        if (user.getWorkouts().contains(workout) == false) {
+            throw new WorkoutNotInUserException(workout.getId(), user.getId());
+        }
+
+        user.removeWorkout(workout);
+        user = userRepository.save(user);
+        userRepository.flush(); // apparently a bug ?
     }
 }

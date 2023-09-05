@@ -5,6 +5,8 @@ import com.trilemau.gymtracking.domain.entity.Exercise;
 import com.trilemau.gymtracking.domain.entity.ExerciseSet;
 import com.trilemau.gymtracking.domain.entity.User;
 import com.trilemau.gymtracking.domain.entity.Workout;
+import com.trilemau.gymtracking.error.exception.ExerciseSetNotInWorkoutException;
+import com.trilemau.gymtracking.error.exception.WorkoutNotInUserException;
 import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeAll;
@@ -35,34 +37,43 @@ public class WorkoutServiceTests {
     @Inject
     private UserService userService;
 
-    private User user;
-
+    private User user1;
+    private User user2;
     private Exercise flatDumbellChestPress;
+    private ExerciseSet exerciseSet1;
+    private ExerciseSet exerciseSet2;
+    private Workout workout1;
+    private Workout workout2;
 
     @BeforeEach
     void setup() {
-        user = userService.getById(1L).orElseThrow(() -> new IllegalArgumentException("Failed to retrieve user"));
+        user1 = userService.getById(111L).orElseThrow(() -> new IllegalArgumentException("Failed to retrieve user"));
+        user2 = userService.getById(222L).orElseThrow(() -> new IllegalArgumentException("Failed to retrieve user"));
         flatDumbellChestPress = exerciseService.getById(111L).orElseThrow(() -> new IllegalArgumentException("Failed to retrieve exercise"));
+        exerciseSet1 = exerciseSetService.getById(111L).orElseThrow(() -> new IllegalArgumentException("Failed to retrieve exercise set"));
+        exerciseSet2 = exerciseSetService.getById(222L).orElseThrow(() -> new IllegalArgumentException("Failed to retrieve exercise set"));
+        workout1 = workoutService.getById(111L).orElseThrow(() -> new IllegalArgumentException("Failed to retrieve workout"));
+        workout2 = workoutService.getById(222L).orElseThrow(() -> new IllegalArgumentException("Failed to retrieve workout"));
     }
 
     @Test
-    void addWorkoutAndExerciseSet() {
+    void addWorkoutAndExerciseSet_Ok() {
         Workout workout = new Workout();
         workout.setDate(LocalDate.of(2023, 1, 1));
         workout.setNotes("Random notes");
 
-        user = userService.addWorkout(workout, user);
-        workout = user.getWorkouts().get(0);
+        userService.addWorkout(workout, user1);
+        workout = user1.getWorkouts().get(0);
 
         ExerciseSet exerciseSet = new ExerciseSet();
         exerciseSet.setReps(10);
         exerciseSet.setWeight(37.5);
         exerciseSet.setExercise(flatDumbellChestPress);
 
-        workout = workoutService.addWorkoutSet(exerciseSet, workout);
+        workoutService.addWorkoutSet(exerciseSet, workout);
         exerciseSet = workout.getExerciseSets().get(0);
 
-        var getUser = userService.getById(user.getId());
+        var getUser = userService.getById(user1.getId());
         assertTrue(getUser.isPresent());
         assertEquals(getUser.get().getWorkouts().size(), 1);
 
@@ -72,5 +83,107 @@ public class WorkoutServiceTests {
 
         var actualExerciseSet = actualWorkout.getExerciseSets().get(0);
         assertEquals(actualExerciseSet, exerciseSet);
+    }
+
+    @Test
+    void addExerciseToWorkout_exerciseIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            workoutService.addWorkoutSet(null, workout2);
+        });
+    }
+
+    @Test
+    void addExerciseToWorkout_workoutIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            workoutService.addWorkoutSet(exerciseSet2, null);
+        });
+    }
+
+    @Test
+    void addWorkoutToUser_exerciseIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            userService.addWorkout(null, user1);
+        });
+    }
+
+    @Test
+    void addWorkoutToUser_UserIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            userService.addWorkout(workout1, null);
+        });
+    }
+
+    @Test
+    void removeExerciseFromWorkout_Ok() {
+        var getExerciseSet = exerciseSetService.getById(exerciseSet1.getId());
+        assertTrue(getExerciseSet.isPresent());
+
+        assertEquals(workout1.getExerciseSets().size(), 1);
+        workoutService.removeWorkoutSet(exerciseSet1, workout1);
+        assertEquals(workout1.getExerciseSets().size(), 0);
+
+        getExerciseSet = exerciseSetService.getById(exerciseSet1.getId());
+        assertFalse(getExerciseSet.isPresent());
+    }
+
+    @Test
+    void removeExerciseFromWorkout_exerciseNotInWorkout() {
+        assertThrows(ExerciseSetNotInWorkoutException.class, () -> {
+            workoutService.removeWorkoutSet(exerciseSet1, workout2);
+        });
+    }
+
+    @Test
+    void removeExerciseFromWorkout_exerciseIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            workoutService.removeWorkoutSet(null, workout2);
+        });
+    }
+
+    @Test
+    void removeExerciseFromWorkout_workoutIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            workoutService.removeWorkoutSet(exerciseSet1, null);
+        });
+    }
+
+    @Test
+    void removeWorkoutFromUser_Ok() {
+        var getWorkout = workoutService.getById(workout1.getId());
+        assertTrue(getWorkout.isPresent());
+
+        var getExerciseSet = exerciseSetService.getById(exerciseSet1.getId());
+        assertTrue(getExerciseSet.isPresent());
+
+        assertEquals(user2.getWorkouts().size(), 1);
+        userService.removeWorkout(workout1, user2);
+        assertEquals(user2.getWorkouts().size(), 0);
+
+        getWorkout = workoutService.getById(workout1.getId());
+        assertFalse(getWorkout.isPresent());
+
+        getExerciseSet = exerciseSetService.getById(exerciseSet1.getId());
+        assertFalse(getExerciseSet.isPresent());
+    }
+
+    @Test
+    void removeWorkoutFromUser_workoutNotInUser() {
+        assertThrows(WorkoutNotInUserException.class, () -> {
+            userService.removeWorkout(workout1, user1);
+        });
+    }
+
+    @Test
+    void removeWorkoutFromUser_workoutIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            userService.removeWorkout(null, user1);
+        });
+    }
+
+    @Test
+    void removeWorkoutFromUser_userIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            userService.removeWorkout(workout1, null);
+        });
     }
 }
