@@ -2,8 +2,7 @@ package com.trilemau.gymtracking.service;
 
 import com.trilemau.gymtracking.domain.entity.User;
 import com.trilemau.gymtracking.domain.entity.Workout;
-import com.trilemau.gymtracking.error.exception.ExerciseSetNotInWorkoutException;
-import com.trilemau.gymtracking.error.exception.WorkoutNotInUserException;
+import com.trilemau.gymtracking.exception.WorkoutNotInUserException;
 import com.trilemau.gymtracking.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

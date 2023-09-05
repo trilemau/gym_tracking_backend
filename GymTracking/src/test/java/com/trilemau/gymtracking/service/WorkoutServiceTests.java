@@ -5,11 +5,9 @@ import com.trilemau.gymtracking.domain.entity.Exercise;
 import com.trilemau.gymtracking.domain.entity.ExerciseSet;
 import com.trilemau.gymtracking.domain.entity.User;
 import com.trilemau.gymtracking.domain.entity.Workout;
-import com.trilemau.gymtracking.error.exception.ExerciseSetNotInWorkoutException;
-import com.trilemau.gymtracking.error.exception.WorkoutNotInUserException;
+import com.trilemau.gymtracking.exception.ExerciseSetNotInWorkoutException;
+import com.trilemau.gymtracking.exception.WorkoutNotInUserException;
 import jakarta.inject.Inject;
-import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -184,6 +182,26 @@ public class WorkoutServiceTests {
     void removeWorkoutFromUser_userIsNull() {
         assertThrows(IllegalArgumentException.class, () -> {
             userService.removeWorkout(workout1, null);
+        });
+    }
+
+    @Test
+    void getWorkoutsByUser_userNoWorkouts() {
+        var workouts = workoutService.getWorkoutsByUser(user2);
+        assertEquals(workouts.size(), 1);
+        assertEquals(workouts.get(0), workout1);
+    }
+
+    @Test
+    void getWorkoutsByUser_userWithWorkouts() {
+        var workouts = workoutService.getWorkoutsByUser(user1);
+        assertEquals(workouts.size(), 0);
+    }
+
+    @Test
+    void getWorkoutsByUser_userIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            workoutService.getWorkoutsByUser(null);
         });
     }
 }
