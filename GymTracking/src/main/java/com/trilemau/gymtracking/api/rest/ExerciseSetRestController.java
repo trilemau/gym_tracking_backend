@@ -5,10 +5,8 @@ import com.trilemau.gymtracking.api.dto.exerciseset.GetAllWorkoutExerciseSetsDto
 import com.trilemau.gymtracking.api.dto.exerciseset.RemoveExerciseSetDto;
 import com.trilemau.gymtracking.api.dto.exerciseset.UpdateExerciseSetDto;
 import com.trilemau.gymtracking.domain.entity.ExerciseSet;
-import com.trilemau.gymtracking.domain.entity.Workout;
 import com.trilemau.gymtracking.exception.ExerciseNotFoundException;
 import com.trilemau.gymtracking.exception.ExerciseSetNotFoundException;
-import com.trilemau.gymtracking.exception.UserNotFoundException;
 import com.trilemau.gymtracking.exception.WorkoutNotFoundException;
 import com.trilemau.gymtracking.service.ExerciseService;
 import com.trilemau.gymtracking.service.ExerciseSetService;
