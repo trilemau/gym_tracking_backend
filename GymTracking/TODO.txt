@@ -1,1 +1,3 @@
 I remove the exerciseSet from workout using "workout.getExerciseSets().remove(exerciseSet)" and persist the changes it using "workoutRepository.save(workout)". Why does exerciseSet still exist in the database?
+
+Add action permissions

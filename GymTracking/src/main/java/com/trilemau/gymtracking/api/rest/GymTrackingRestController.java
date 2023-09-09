@@ -16,7 +16,8 @@ public class GymTrackingRestController {
 
     @GetMapping(path = HEALTH_CHECK_PATH, produces = APPLICATION_JSON_VALUE)
     String healthCheck() {
-        log.info("Health check endpoint called.");
+        log.info(HEALTH_CHECK_PATH + " invoked.");
+
         return "Gym tracking is healthy";
     }
 }
