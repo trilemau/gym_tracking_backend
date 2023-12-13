@@ -26,7 +26,8 @@ public class ExerciseRestController {
     private static final String REMOVE_EXERCISE_PATH = "/v1/exercise/remove";
     private static final String GET_WORKOUT_EXERCISES_PATH = "/v1/exercise/get-exercises";
 
-    private ExerciseService exerciseService;
+
+    private final ExerciseService exerciseService;
 
     @PostMapping(path = ADD_EXERCISE_PATH, produces = APPLICATION_JSON_VALUE)
     ResponseEntity<Void> addExercise(@RequestBody @Valid AddExerciseDto addExerciseDto) {
